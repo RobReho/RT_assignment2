@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<launch>
+
+	<include file="$(find final_assignment)/launch/simulation_gmapping.launch"></include>
+	<include file="$(find final_assignment)/launch/move_base.launch"></include>
+
+	<arg name="mod" default= "4"/>
+    <param name="mode" value="$(arg mod)" />
+	
+	<arg name="st" default= "2"/>
+    <param name="state" value="$(arg st)" />
+
+	<!--arg name="trg_rch" default= "true"/-->
+    <!--param name="target_reached" value="$(arg trg_rch)" /-->
+
+	<arg name="des_x" default= "-3"/>
+    <arg name="des_y" default= "-3"/>
+    <param name="des_pos_x" value="$(arg des_x)" />
+    <param name="des_pos_y" value="$(arg des_y)" />
+    
+	
+	<node pkg="final_assignment" type="random_target_service.py" name="random_service" output="screen" />
+	<node pkg="final_assignment" type="man_targ_service.py" name="man_targ_service" launch-prefix="terminator -x python" output="screen" />
+	<node pkg="final_assignment" type="controller.py" name="controller" launch-prefix="terminator -x python" output="screen" />
+    <node pkg="final_assignment" type="wall_follow_service_m.py" name="wall_follower" />
+    <node pkg="final_assignment" type="go_to_point_service_m.py" name="go_to_point" />
+    <node pkg="final_assignment" type="state_publisher.py" name="state_publisher" output="screen" />
+    <node pkg="final_assignment" type="bug_m.py" name="bug" output="screen"/>
+
+		<!--launch-prefix="terminator -x python"/-->
+</launch>
