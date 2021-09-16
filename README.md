@@ -33,7 +33,7 @@ In case the chosen behaviour is number 2, the inteface will display a further me
 The screen output of the node is printed in a new window, opened though the launch file.
 
 ### state_publisher.py
-Is a separate node that prints some relevant information on screen.
+Is a separate node that prints some relevant information on the main terminal.
 It is subscribed to the topics /scan and /odom in order to receive updated datas reguarding the position of the robot and the laser distances.
 At every cycle the nodes prints:
 * the content of the parameter "state" among 'Go to point', 'wall following', 'target reached','stopped'
@@ -42,7 +42,7 @@ At every cycle the nodes prints:
 * the distances of the obstacles in the main regions "right", "fright", "front", "fleft", "left"
 * the boolean parameter "target_reached"
 
-The informations are printed every 3 seconds to prevent the console from being crowded.
+The informations are printed every 3 seconds to prevent the terminal from being crowded.
 These information will be displayed together with all the outputs of the other nodes except for the user interface.
 
 ### random_target_service.py
