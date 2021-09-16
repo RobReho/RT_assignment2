@@ -61,7 +61,7 @@ The modes "wall_follower" and "go_to _point" are the same as the ones provided o
 
 
 ## Computational graph of the system
----jpg---
+![alt text](https://github.com/RobReho/RT_assignment2/blob/main/rosgraph.png)
 
 ## Roslaunch 
 The application can be run with a single launch file "final.launch". It includes "simulation_gmapping.launch" and "move_base.launch" from the same folder and runs all the nodes and services listed above.
