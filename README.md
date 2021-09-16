@@ -93,7 +93,7 @@ The robot can behave differently according to the user input:
 
 After a mode is inserted the user interface is immediately available to receive a new command.
 In case of both modes 1 and 2 the robots stops once the target position has been reached and waits for a new command. If the target has not been reached yet it is still possible to call for behaviour 1 or 2 and insert a new target that will be taken charge of right away.
-If the user wants to change from modes 1 or 2 to 3 and 5, the robot will wait until after the current target has been reached. On the other hand, it is possible to immediately switch from mode 3 to any other. 
+If the user wants to change from modes 1 or 2 to 3 and 5, the robot will wait until after the current target has been reached, displaying a worning message on the mein terminal. On the other hand, it is possible to immediately switch from mode 3 to any other. 
 
 ## Software architecture 
 State, mode and target coordinates are defined as parameters since multiple nodes need access to it depending on the behaviour to be executed or the algorithm used. For this reason, a publish to blackboard communication paradigm seemed the most appropriate.
