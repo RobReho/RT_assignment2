@@ -30,7 +30,7 @@ dist_precision_ = 0.3
 kp_a = 3.0  # In ROS Noetic, it may be necessary to change the sign of this proportional controller
 kp_d = 0.2
 ub_a = 0.6
-lb_a = -0.5
+lb_a = -0.53
 ub_d = 0.6
 
 # publishers

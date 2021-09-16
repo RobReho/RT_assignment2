@@ -1,5 +1,9 @@
 #! /usr/bin/env python
 
+## Modifications:
+# - activation service switch
+# - expiring timer
+
 import rospy
 import time
 # import ros message
@@ -24,20 +28,19 @@ desired_position_ = Point()
 desired_position_.x = rospy.get_param('des_pos_x')
 desired_position_.y = rospy.get_param('des_pos_y')
 desired_position_.z = 0
-regions_ = None
+regions_ = None     # Laser directions
 state_desc_ = ['Go to point', 'wall following', 'target reached']
 state_ = 0
-active_ = False
-
+active_ = False     # initialize algorithm as not active
+timeout = None      # Timer
 
 # 0 - go to point
 # 1 - wall following
 
+
 # callbacks
 
 ## Callback service function to activate or deactivate the service
-# @param req True to activate the service, False to deactivate
-# @return res True to confirm that the operation is done
 def bug0Callback(req):
 	global active_
 	active_ = req.data
@@ -84,21 +87,23 @@ def change_state(state):
     if state_ == 0:         # go to point
         resp = srv_client_go_to_point_(True)
         resp = srv_client_wall_follower_(False)
-        #rospy.set_param("state", 0)     # state 0 = go to point
+        rospy.set_param("target_reached", False)    # update parameter
+        rospy.set_param("state", 0)     # go to point
+
     if state_ == 1:         # wall follower
         resp = srv_client_go_to_point_(False)
         resp = srv_client_wall_follower_(True)
-        #rospy.set_param("state", 1)     # state 1 = wall follower
+        rospy.set_param("state", 1)     # wall following
+
     if state_ == 2:         # target reached
         resp = srv_client_go_to_point_(False)
         resp = srv_client_wall_follower_(False)
-        #rospy.set_param("state", 2)     # state 2 = stop
         twist_msg = Twist()
         twist_msg.linear.x = 0
         twist_msg.angular.z = 0
         pub.publish(twist_msg)
-       # resp = srv_client_user_interface_()
-
+        rospy.set_param("target_reached", True)    
+        rospy.set_param("state", 2)     # target reached 
 
 def normalize_angle(angle):
     if(math.fabs(angle) > math.pi):
@@ -109,7 +114,7 @@ def normalize_angle(angle):
 def main():
     time.sleep(2)
     global regions_, position_, desired_position_, state_, yaw_, yaw_error_allowed_, active_
-    global srv_client_go_to_point_, srv_client_wall_follower_, srv_client_user_interface_, pub
+    global srv_client_go_to_point_, srv_client_wall_follower_, srv_client_user_interface_, pub, timeout
 
     rospy.init_node('bug0')
 
@@ -117,14 +122,13 @@ def main():
     sub_odom = rospy.Subscriber('/odom', Odometry, clbk_odom)
     pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
 
-    srv_client_go_to_point_ = rospy.ServiceProxy(
-        '/go_to_point_switch', SetBool)
-    srv_client_wall_follower_ = rospy.ServiceProxy(
-        '/wall_follower_switch', SetBool)
+    srv_client_go_to_point_ = rospy.ServiceProxy('/go_to_point_switch', SetBool)
+    srv_client_wall_follower_ = rospy.ServiceProxy('/wall_follower_switch', SetBool)
     #srv_client_user_interface_ = rospy.ServiceProxy('/user_interface', Empty)
     srv = rospy.Service('bug0_service', SetBool, bug0Callback)
 
-    # initialize going to the point
+    
+    # initialize initial state as "target reached"
     change_state(2)
 
     rate = rospy.Rate(20)
@@ -132,27 +136,40 @@ def main():
         if regions_ == None:
             continue
 
-        if not active_:                 #last change
+        if not active_:   # Switch variable that activates the Bug service
             rate.sleep()
             continue
-        else:
 
+        else:
             if state_ == 0:
-                #print("bug algorithm here!!!! STATE 0\n")
                 err_pos = math.sqrt(pow(desired_position_.y - position_.y, 2) + pow(desired_position_.x - position_.x, 2))
-                if(err_pos < 0.3):
+
+                #if timer is expired change state to 2: target reached and print target aborted
+                if rospy.Time.now() >= timeout:
+                    rospy.set_param("mode",4)
+                    rospy.set_param("target_reached",True)
                     change_state(2)
+                    print("The timer has expired. Target aborted.")
+
+                if(err_pos < 0.3):
+                    change_state(2) # target reached
 
                 elif regions_['front'] < 0.5:
-                    change_state(1)
+                    change_state(1) # wall follower
 
             elif state_ == 1:
-                #print("bug algorithm here!!!! STATE 1\n")
                 desired_yaw = math.atan2(
                     desired_position_.y - position_.y, desired_position_.x - position_.x)
                 err_yaw = normalize_angle(desired_yaw - yaw_)
                 err_pos = math.sqrt(pow(desired_position_.y - position_.y,
                                         2) + pow(desired_position_.x - position_.x, 2))
+
+                #if timer is expired change state to 2: target reached and print target aborted
+                if rospy.Time.now() >= timeout:
+                    rospy.set_param("mode",4)
+                    rospy.set_param("target_reached",True)
+                    change_state(2)
+                    print("The timer has expired. Target aborted.")
 
                 if(err_pos < 0.3):
                     change_state(2)
@@ -160,13 +177,21 @@ def main():
                     change_state(0)
 
             elif state_ == 2:
-                #print("bug algorithm here!!!! STATE 2\n")
+
+                #give time to user to insert the command
+                while rospy.get_param("/mode") !=  1 and rospy.get_param("/mode") != 2:
+                    continue
+
                 desired_position_.x = rospy.get_param('des_pos_x')
                 desired_position_.y = rospy.get_param('des_pos_y')
-                err_pos = math.sqrt(pow(desired_position_.y - position_.y,
-                                        2) + pow(desired_position_.x - position_.x, 2))
+                err_pos = math.sqrt(pow(desired_position_.y - position_.y, 2) + pow(desired_position_.x - position_.x, 2))
+
+                # If the target is far from the robot position:
                 if(err_pos > 0.35):
-                    change_state(0)
+                    print "Starting timer"
+                    now = rospy.Time.now()      # Starts the timer
+                    timeout = now + rospy.Duration(40) # 40 seconds of timeout
+                    change_state(0)     # change to go to point state
 
             rate.sleep()
 
