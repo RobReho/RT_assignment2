@@ -1,0 +1,124 @@
+\hypertarget{namespacecontroller}{}\section{controller Namespace Reference}
+\label{namespacecontroller}\index{controller@{controller}}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacecontroller_a921b59428797e89aa059050e061014f9}{set\+\_\+goal} ()
+\begin{DoxyCompactList}\small\item\em Function called when move\+\_\+base is the active algorithm. \end{DoxyCompactList}\item 
+def \hyperlink{namespacecontroller_a58a7bbc614b6a885eaeb12996e134ff7}{result\+\_\+callback} (result)
+\begin{DoxyCompactList}\small\item\em Callback function of the move\+\_\+base algorithm. \end{DoxyCompactList}\item 
+def \hyperlink{namespacecontroller_a432e354948f911d131f99e3abbc7bc64}{stop\+\_\+robot} ()
+\begin{DoxyCompactList}\small\item\em Function for stopping the robot The function is calling mode 4, which stops the robot. \end{DoxyCompactList}\item 
+def \hyperlink{namespacecontroller_a8118d5e083db16a381dbecddfd6cc646}{main} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespacecontroller_a0f904cc2eef40a1c5ce7629120e3670a}{mb\+\_\+goal} = None
+\item 
+bool \hyperlink{namespacecontroller_ab6fae2c9650e9c1d6f77bcbfe8667443}{bug\+\_\+active} = False
+\item 
+\hyperlink{namespacecontroller_a07e67d3edbf36beb640f1be1f23ac99c}{msg\+\_\+target\+\_\+pub} = rospy.\+Publisher(\char`\"{}move\+\_\+base/goal\char`\"{}, Move\+Base\+Action\+Goal, queue\+\_\+size=1)
+\begin{DoxyCompactList}\small\item\em Goal publishers Publish next goal. \end{DoxyCompactList}\item 
+\hyperlink{namespacecontroller_a88ae131d2c0f84a0dfe387ebd15b2a09}{cancel\+\_\+trg\+\_\+pub} = rospy.\+Publisher(\char`\"{}/move\+\_\+base/cancel\char`\"{}, Goal\+ID, queue\+\_\+size = 1)
+\item 
+\hyperlink{namespacecontroller_ac5bba2b88eaa622e94ba61133ac349fa}{cmdvel\+\_\+pub} = rospy.\+Publisher(\char`\"{}/cmd\+\_\+vel\char`\"{}, Twist, queue\+\_\+size = 1)
+\begin{DoxyCompactList}\small\item\em Null velocity publisher (stop option) \end{DoxyCompactList}\item 
+\hyperlink{namespacecontroller_adbf0de4e6eb4bae0a6542d6314be0540}{srv\+\_\+client\+\_\+random\+\_\+target\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/random\+\_\+target\textquotesingle{}, Empty)
+\begin{DoxyCompactList}\small\item\em Services Service called to generate a random target. \end{DoxyCompactList}\item 
+\hyperlink{namespacecontroller_ad33164e09a0e6fa7ae3739d14837b1f3}{srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/user\+\_\+interface\textquotesingle{}, Empty)
+\item 
+\hyperlink{namespacecontroller_a504edbef27b5bb8d2dce7263ae16a1bd}{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/wall\+\_\+follower\+\_\+switch\textquotesingle{}, Set\+Bool)
+\item 
+\hyperlink{namespacecontroller_ac783da4ecabafe9488d3b5ceeb0f839d}{srv\+\_\+bug0\+\_\+client} = rospy.\+Service\+Proxy(\textquotesingle{}/bug0\+\_\+service\textquotesingle{},Set\+Bool)
+\item 
+\hyperlink{namespacecontroller_adb267b7bd1091c26caa203a40965a188}{srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/go\+\_\+to\+\_\+point\+\_\+switch\textquotesingle{}, Set\+Bool)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\index{controller@{controller}!main@{main}}
+\index{main@{main}!controller@{controller}}
+\subsubsection[{\texorpdfstring{main()}{main()}}]{\setlength{\rightskip}{0pt plus 5cm}def controller.\+main (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecontroller_a8118d5e083db16a381dbecddfd6cc646}{}\label{namespacecontroller_a8118d5e083db16a381dbecddfd6cc646}
+\index{controller@{controller}!result\+\_\+callback@{result\+\_\+callback}}
+\index{result\+\_\+callback@{result\+\_\+callback}!controller@{controller}}
+\subsubsection[{\texorpdfstring{result\+\_\+callback(result)}{result_callback(result)}}]{\setlength{\rightskip}{0pt plus 5cm}def controller.\+result\+\_\+callback (
+\begin{DoxyParamCaption}
+\item[{}]{result}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecontroller_a58a7bbc614b6a885eaeb12996e134ff7}{}\label{namespacecontroller_a58a7bbc614b6a885eaeb12996e134ff7}
+
+
+Callback function of the move\+\_\+base algorithm. 
+
+It is called every time the algorithm publishes a message of to the topic /move\+\_\+base/result. In case of success it switches the \char`\"{}target\+\_\+reached\char`\"{} parameter to True and prints the status on the console \index{controller@{controller}!set\+\_\+goal@{set\+\_\+goal}}
+\index{set\+\_\+goal@{set\+\_\+goal}!controller@{controller}}
+\subsubsection[{\texorpdfstring{set\+\_\+goal()}{set_goal()}}]{\setlength{\rightskip}{0pt plus 5cm}def controller.\+set\+\_\+goal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecontroller_a921b59428797e89aa059050e061014f9}{}\label{namespacecontroller_a921b59428797e89aa059050e061014f9}
+
+
+Function called when move\+\_\+base is the active algorithm. 
+
+Gets the target position set in the parameters by the concerning services and publishes it as goal position with a message of type move\+\_\+base\+\_\+msgs/\+Move\+Base\+Action\+Goal on the topic move\+\_\+base /goal. \index{controller@{controller}!stop\+\_\+robot@{stop\+\_\+robot}}
+\index{stop\+\_\+robot@{stop\+\_\+robot}!controller@{controller}}
+\subsubsection[{\texorpdfstring{stop\+\_\+robot()}{stop_robot()}}]{\setlength{\rightskip}{0pt plus 5cm}def controller.\+stop\+\_\+robot (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{namespacecontroller_a432e354948f911d131f99e3abbc7bc64}{}\label{namespacecontroller_a432e354948f911d131f99e3abbc7bc64}
+
+
+Function for stopping the robot The function is calling mode 4, which stops the robot. 
+
+In case there is a target to be reached, the function sends a message of type actionlib\+\_\+msgs/\+Goal\+ID to the topic /move\+\_\+base/cancel. It also sends a message to /cmd\+\_\+vel with null velocity. 
+
+\subsection{Variable Documentation}
+\index{controller@{controller}!bug\+\_\+active@{bug\+\_\+active}}
+\index{bug\+\_\+active@{bug\+\_\+active}!controller@{controller}}
+\subsubsection[{\texorpdfstring{bug\+\_\+active}{bug_active}}]{\setlength{\rightskip}{0pt plus 5cm}bool controller.\+bug\+\_\+active = False}\hypertarget{namespacecontroller_ab6fae2c9650e9c1d6f77bcbfe8667443}{}\label{namespacecontroller_ab6fae2c9650e9c1d6f77bcbfe8667443}
+\index{controller@{controller}!cancel\+\_\+trg\+\_\+pub@{cancel\+\_\+trg\+\_\+pub}}
+\index{cancel\+\_\+trg\+\_\+pub@{cancel\+\_\+trg\+\_\+pub}!controller@{controller}}
+\subsubsection[{\texorpdfstring{cancel\+\_\+trg\+\_\+pub}{cancel_trg_pub}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+cancel\+\_\+trg\+\_\+pub = rospy.\+Publisher(\char`\"{}/move\+\_\+base/cancel\char`\"{}, Goal\+ID, queue\+\_\+size = 1)}\hypertarget{namespacecontroller_a88ae131d2c0f84a0dfe387ebd15b2a09}{}\label{namespacecontroller_a88ae131d2c0f84a0dfe387ebd15b2a09}
+\index{controller@{controller}!cmdvel\+\_\+pub@{cmdvel\+\_\+pub}}
+\index{cmdvel\+\_\+pub@{cmdvel\+\_\+pub}!controller@{controller}}
+\subsubsection[{\texorpdfstring{cmdvel\+\_\+pub}{cmdvel_pub}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+cmdvel\+\_\+pub = rospy.\+Publisher(\char`\"{}/cmd\+\_\+vel\char`\"{}, Twist, queue\+\_\+size = 1)}\hypertarget{namespacecontroller_ac5bba2b88eaa622e94ba61133ac349fa}{}\label{namespacecontroller_ac5bba2b88eaa622e94ba61133ac349fa}
+
+
+Null velocity publisher (stop option) 
+
+\index{controller@{controller}!mb\+\_\+goal@{mb\+\_\+goal}}
+\index{mb\+\_\+goal@{mb\+\_\+goal}!controller@{controller}}
+\subsubsection[{\texorpdfstring{mb\+\_\+goal}{mb_goal}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+mb\+\_\+goal = None}\hypertarget{namespacecontroller_a0f904cc2eef40a1c5ce7629120e3670a}{}\label{namespacecontroller_a0f904cc2eef40a1c5ce7629120e3670a}
+\index{controller@{controller}!msg\+\_\+target\+\_\+pub@{msg\+\_\+target\+\_\+pub}}
+\index{msg\+\_\+target\+\_\+pub@{msg\+\_\+target\+\_\+pub}!controller@{controller}}
+\subsubsection[{\texorpdfstring{msg\+\_\+target\+\_\+pub}{msg_target_pub}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+msg\+\_\+target\+\_\+pub = rospy.\+Publisher(\char`\"{}move\+\_\+base/goal\char`\"{}, Move\+Base\+Action\+Goal, queue\+\_\+size=1)}\hypertarget{namespacecontroller_a07e67d3edbf36beb640f1be1f23ac99c}{}\label{namespacecontroller_a07e67d3edbf36beb640f1be1f23ac99c}
+
+
+Goal publishers Publish next goal. 
+
+\index{controller@{controller}!srv\+\_\+bug0\+\_\+client@{srv\+\_\+bug0\+\_\+client}}
+\index{srv\+\_\+bug0\+\_\+client@{srv\+\_\+bug0\+\_\+client}!controller@{controller}}
+\subsubsection[{\texorpdfstring{srv\+\_\+bug0\+\_\+client}{srv_bug0_client}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+srv\+\_\+bug0\+\_\+client = rospy.\+Service\+Proxy(\textquotesingle{}/bug0\+\_\+service\textquotesingle{},Set\+Bool)}\hypertarget{namespacecontroller_ac783da4ecabafe9488d3b5ceeb0f839d}{}\label{namespacecontroller_ac783da4ecabafe9488d3b5ceeb0f839d}
+\index{controller@{controller}!srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+@{srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+}}
+\index{srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+@{srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+}!controller@{controller}}
+\subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+}{srv_client_go_to_point_}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+ = rospy.\+Service\+Proxy(\textquotesingle{}/go\+\_\+to\+\_\+point\+\_\+switch\textquotesingle{}, Set\+Bool)}\hypertarget{namespacecontroller_adb267b7bd1091c26caa203a40965a188}{}\label{namespacecontroller_adb267b7bd1091c26caa203a40965a188}
+\index{controller@{controller}!srv\+\_\+client\+\_\+random\+\_\+target\+\_\+@{srv\+\_\+client\+\_\+random\+\_\+target\+\_\+}}
+\index{srv\+\_\+client\+\_\+random\+\_\+target\+\_\+@{srv\+\_\+client\+\_\+random\+\_\+target\+\_\+}!controller@{controller}}
+\subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+random\+\_\+target\+\_\+}{srv_client_random_target_}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+srv\+\_\+client\+\_\+random\+\_\+target\+\_\+ = rospy.\+Service\+Proxy(\textquotesingle{}/random\+\_\+target\textquotesingle{}, Empty)}\hypertarget{namespacecontroller_adbf0de4e6eb4bae0a6542d6314be0540}{}\label{namespacecontroller_adbf0de4e6eb4bae0a6542d6314be0540}
+
+
+Services Service called to generate a random target. 
+
+\index{controller@{controller}!srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+@{srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+}}
+\index{srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+@{srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+}!controller@{controller}}
+\subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+}{srv_client_user_interface_}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+ = rospy.\+Service\+Proxy(\textquotesingle{}/user\+\_\+interface\textquotesingle{}, Empty)}\hypertarget{namespacecontroller_ad33164e09a0e6fa7ae3739d14837b1f3}{}\label{namespacecontroller_ad33164e09a0e6fa7ae3739d14837b1f3}
+\index{controller@{controller}!srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+@{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+}}
+\index{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+@{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+}!controller@{controller}}
+\subsubsection[{\texorpdfstring{srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+}{srv_client_wall_follower_}}]{\setlength{\rightskip}{0pt plus 5cm}controller.\+srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+ = rospy.\+Service\+Proxy(\textquotesingle{}/wall\+\_\+follower\+\_\+switch\textquotesingle{}, Set\+Bool)}\hypertarget{namespacecontroller_a504edbef27b5bb8d2dce7263ae16a1bd}{}\label{namespacecontroller_a504edbef27b5bb8d2dce7263ae16a1bd}

@@ -1,0 +1,41 @@
+\hypertarget{controller_8py}{}\section{scripts/controller.py File Reference}
+\label{controller_8py}\index{scripts/controller.\+py@{scripts/controller.\+py}}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacecontroller}{controller}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \hyperlink{namespacecontroller_a921b59428797e89aa059050e061014f9}{controller.\+set\+\_\+goal} ()
+\begin{DoxyCompactList}\small\item\em Function called when move\+\_\+base is the active algorithm. \end{DoxyCompactList}\item 
+def \hyperlink{namespacecontroller_a58a7bbc614b6a885eaeb12996e134ff7}{controller.\+result\+\_\+callback} (result)
+\begin{DoxyCompactList}\small\item\em Callback function of the move\+\_\+base algorithm. \end{DoxyCompactList}\item 
+def \hyperlink{namespacecontroller_a432e354948f911d131f99e3abbc7bc64}{controller.\+stop\+\_\+robot} ()
+\begin{DoxyCompactList}\small\item\em Function for stopping the robot The function is calling mode 4, which stops the robot. \end{DoxyCompactList}\item 
+def \hyperlink{namespacecontroller_a8118d5e083db16a381dbecddfd6cc646}{controller.\+main} ()
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespacecontroller_a0f904cc2eef40a1c5ce7629120e3670a}{controller.\+mb\+\_\+goal} = None
+\item 
+bool \hyperlink{namespacecontroller_ab6fae2c9650e9c1d6f77bcbfe8667443}{controller.\+bug\+\_\+active} = False
+\item 
+\hyperlink{namespacecontroller_a07e67d3edbf36beb640f1be1f23ac99c}{controller.\+msg\+\_\+target\+\_\+pub} = rospy.\+Publisher(\char`\"{}move\+\_\+base/goal\char`\"{}, Move\+Base\+Action\+Goal, queue\+\_\+size=1)
+\begin{DoxyCompactList}\small\item\em Goal publishers Publish next goal. \end{DoxyCompactList}\item 
+\hyperlink{namespacecontroller_a88ae131d2c0f84a0dfe387ebd15b2a09}{controller.\+cancel\+\_\+trg\+\_\+pub} = rospy.\+Publisher(\char`\"{}/move\+\_\+base/cancel\char`\"{}, Goal\+ID, queue\+\_\+size = 1)
+\item 
+\hyperlink{namespacecontroller_ac5bba2b88eaa622e94ba61133ac349fa}{controller.\+cmdvel\+\_\+pub} = rospy.\+Publisher(\char`\"{}/cmd\+\_\+vel\char`\"{}, Twist, queue\+\_\+size = 1)
+\begin{DoxyCompactList}\small\item\em Null velocity publisher (stop option) \end{DoxyCompactList}\item 
+\hyperlink{namespacecontroller_adbf0de4e6eb4bae0a6542d6314be0540}{controller.\+srv\+\_\+client\+\_\+random\+\_\+target\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/random\+\_\+target\textquotesingle{}, Empty)
+\begin{DoxyCompactList}\small\item\em Services Service called to generate a random target. \end{DoxyCompactList}\item 
+\hyperlink{namespacecontroller_ad33164e09a0e6fa7ae3739d14837b1f3}{controller.\+srv\+\_\+client\+\_\+user\+\_\+interface\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/user\+\_\+interface\textquotesingle{}, Empty)
+\item 
+\hyperlink{namespacecontroller_a504edbef27b5bb8d2dce7263ae16a1bd}{controller.\+srv\+\_\+client\+\_\+wall\+\_\+follower\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/wall\+\_\+follower\+\_\+switch\textquotesingle{}, Set\+Bool)
+\item 
+\hyperlink{namespacecontroller_ac783da4ecabafe9488d3b5ceeb0f839d}{controller.\+srv\+\_\+bug0\+\_\+client} = rospy.\+Service\+Proxy(\textquotesingle{}/bug0\+\_\+service\textquotesingle{},Set\+Bool)
+\item 
+\hyperlink{namespacecontroller_adb267b7bd1091c26caa203a40965a188}{controller.\+srv\+\_\+client\+\_\+go\+\_\+to\+\_\+point\+\_\+} = rospy.\+Service\+Proxy(\textquotesingle{}/go\+\_\+to\+\_\+point\+\_\+switch\textquotesingle{}, Set\+Bool)
+\end{DoxyCompactItemize}

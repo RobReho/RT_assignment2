@@ -1,0 +1,117 @@
+Roberta Reho -\/ 5075214
+
+\subsection*{I\+N\+D\+EX }
+
+
+\begin{DoxyItemize}
+\item Contents of the package
+\item Computational graph of the system
+\item Roslaunch
+\item Installation and running
+\item Robot behaviors implemented
+\item Software architecture
+\item System\textquotesingle{}s limitations and possible improvements
+\end{DoxyItemize}
+
+\subsection*{Contents of the package}
+
+The pakage contains new nodes that implement some new behaviours, other than the ones already seen in previous exercises (\hyperlink{bug__m_8py}{bug\+\_\+m.\+py}, go\+\_\+to\+\_\+point.\+py, wall\+\_\+follow\+\_\+service.\+py).
+
+\subsubsection*{\hyperlink{controller_8py}{controller.\+py}}
+
+Is the main node of the architecture\+: it publishes to the topics move\+\_\+base/goal and move\+\_\+base/cancel to set and cancel target coordinates for the move\+\_\+base algorithm. Moreover, it publishes to the topic /cmd\+\_\+vel to set the robot\textquotesingle{}s velocity. The node manages the different behaviours through the services displayed below. At the beginning of the routine it calls the \hyperlink{namespaceuser__interface}{user\+\_\+interface} service in order to acquire the commands from the user. Depending on the command, the appropriate services and will be activated to perform the right behaviour. The node is subscribed to the topic /move\+\_\+base/result that publishes a message every time a target has been reached with the move\+\_\+base algorithm.
+
+\subsubsection*{\hyperlink{user__interface_8py}{user\+\_\+interface.\+py}}
+
+Is a service that allows the user to input the command matching the desired behaviour\+:
+\begin{DoxyEnumerate}
+\item Move randomly to one of the positions\+: (-\/4,3);(-\/4,2);(-\/4,7);(5,-\/7);(5,-\/3);(5,1)
+\item Manually inser one of the 6 positions among the list above;
+\item Start following the external walls;
+\item Stop in the last position;
+\item Change algorithm;
+\end{DoxyEnumerate}
+
+In case the chosen behaviour is number 2, the inteface will display a further message, allowing to insert one of the available coordinates. A while cycle is implemented to verify the validity of the input. The screen output of the node is printed in a new window, opened though the launch file.
+
+\subsubsection*{\hyperlink{state__publisher_8py}{state\+\_\+publisher.\+py}}
+
+Is a separate node that prints some relevant information on the main terminal. It is subscribed to the topics /scan and /odom in order to receive updated datas reguarding the position of the robot and the laser distances. At every cycle the nodes prints\+:
+\begin{DoxyItemize}
+\item the content of the parameter \char`\"{}state\char`\"{} among \textquotesingle{}Go to point\textquotesingle{}, \textquotesingle{}wall following\textquotesingle{}, \textquotesingle{}target reached\textquotesingle{},\textquotesingle{}stopped\textquotesingle{}
+\item the target to be reached in case of mode 1 or 2
+\item x, y, z coordinates of the robot position
+\item the distances of the obstacles in the main regions \char`\"{}right\char`\"{}, \char`\"{}fright\char`\"{}, \char`\"{}front\char`\"{}, \char`\"{}fleft\char`\"{}, \char`\"{}left\char`\"{}
+\item the boolean parameter \char`\"{}target\+\_\+reached\char`\"{}
+\end{DoxyItemize}
+
+The informations are printed every 3 seconds to prevent the terminal from being crowded. These information will be displayed together with all the outputs of the other nodes except for the user interface.
+
+\subsubsection*{\hyperlink{random__target__service_8py}{random\+\_\+target\+\_\+service.\+py}}
+
+The service server is called by the client \hyperlink{controller_8py}{controller.\+py} in case the input command is \char`\"{}1\char`\"{}. The server is sent an empty message and generates random coordinates among the available ones. Then updates the corresponding parameters so that the coordinates are available to multiple nodes.
+
+\subsubsection*{\hyperlink{bug__m_8py}{bug\+\_\+m.\+py}}
+
+The bug algorithm node is mainly the same as the provided one, with a few modifications\+:
+\begin{DoxyItemize}
+\item The initial state is set on \char`\"{}target reached\char`\"{} instead of \char`\"{}go to point\char`\"{} (2 in place of 0);
+\item A new service allows the algorithm to be switched on and off from an external client, in this case, implemented in the controller node;
+\item The \char`\"{}change\+\_\+state\char`\"{} function is now able to access the global parameter \char`\"{}target\+\_\+reached\char`\"{} and switch its state, as well as the parameter \char`\"{}state\char`\"{};
+\item A 40 seconds timer has been implemented to avoid Bug0 algorithm to get stuck trying to reach and unreachable target. The timer starts as soon as the robot is reaching for its target and, if it expires before the goal is reached, it returns the state \char`\"{}target\+\_\+reached\char`\"{} anyway.
+\end{DoxyItemize}
+
+\subsubsection*{wall\+\_\+follower.\+py and go\+\_\+to\+\_\+point.\+py}
+
+The modes \char`\"{}wall\+\_\+follower\char`\"{} and \char`\"{}go\+\_\+to \+\_\+point\char`\"{} are the same as the ones provided originally.
+
+\subsection*{Computational graph of the system}
+
+
+
+\subsection*{Roslaunch}
+
+The application can be run with a single launch file \char`\"{}final.\+launch\char`\"{}. It includes \char`\"{}simulation\+\_\+gmapping.\+launch\char`\"{} and \char`\"{}move\+\_\+base.\+launch\char`\"{} from the same folder and runs all the nodes and services listed above. Moreover, a series of parameters are defined\+:
+\begin{DoxyItemize}
+\item mode\+: int variable from 1 to 5, indicates the current robot mode among the 5 available;
+\item state\+: int variable from 0 to 3, respectively \char`\"{}go to point\char`\"{},\char`\"{}wall follower\char`\"{},\char`\"{}target reached\char`\"{},\char`\"{}stopped\char`\"{};
+\item des\+\_\+pos\+\_\+x / des\+\_\+pos\+\_\+y\+: target coordinates set by the random target service or the user interface;
+\item target\+\_\+reached\+: bolean variable, states whether the target has been reached or not; These parameters are a publish to blackboard-\/like communication paradigm between nodes.
+\end{DoxyItemize}
+
+\subsection*{Installation and running}
+
+The package final\+\_\+assignment requires the packages \href{http://wiki.ros.org/move_base}{\tt move\+\_\+base} and \href{http://wiki.ros.org/gmapping}{\tt gmapping} in order to work proprely. Moreover, the robot U\+R\+DF is taken from the package \href{https://github.com/CarmineD8/robot_description}{\tt robot\+\_\+description} The package also uses Rviz and Gazebo. The application can be run by launching the final.\+lounch file in the launch folder
+
+
+\begin{DoxyCode}
+1 roslaunch final\_assignment final.launch
+\end{DoxyCode}
+
+
+\subsection*{Robot behaviors implemented}
+
+The robot can behave differently according to the user input\+:
+\begin{DoxyItemize}
+\item Mode 1 -\/ the robot is given a random target among (-\/4,3);(-\/4,2);(-\/4,7);(5,-\/7);(5,-\/3);(5,1), then it starts reaching it with the active algorithm.
+\item Mode 2 -\/ the user as asked to manually insert a target among the same listed above. Again, after checking whether the input is valid, the robot goes towords the target using the active algorithm.
+\item Mode 3 -\/ If the last target set has been reached, the robot starts searching for a wall and follows it.
+\item Mode 4 -\/ The robot stops in the current position.
+\item Mode 5 -\/ Is a switcher between Move base and Bug0 algorithms.
+\end{DoxyItemize}
+
+After a mode is inserted the user interface is immediately available to receive a new command. In case of both modes 1 and 2 the robots stops once the target position has been reached and waits for a new command. If the target has not been reached yet it is still possible to call for behaviour 1 or 2 and insert a new target that will be taken charge of right away. If the user wants to change from modes 1 or 2 to 3 and 5, the robot will wait until after the current target has been reached, displaying a worning message on the mein terminal. On the other hand, it is possible to immediately switch from mode 3 to any other.
+
+\subsection*{Software architecture}
+
+State, mode and target coordinates are defined as parameters since multiple nodes need access to it depending on the behaviour to be executed or the algorithm used. For this reason, a publish to blackboard communication paradigm seemed the most appropriate. The user interface node is called on a new terminal through
+
+
+\begin{DoxyCode}
+1 launch-prefix="terminator -x python"
+\end{DoxyCode}
+ in the launch file. This choice was made to have a tidy terminal completely dedicated to acquiring commands, separated from the messages printed in the main terminal. State publisher has been implemented as a separate node printing periodically on the main terminal along some other messages produced by the rest of the nodes (except for the user interface). The node takes informations from global variables and parameters and its modular nature allows it to be easily disabled for debugging purposes.
+
+\subsection*{System\textquotesingle{}s limitations and possible improvements}
+
+For unknown reasons the topic /move\+\_\+base/result takes up to 20 seconds before publishing the result message once the target has been reached with move\+\_\+base algorithm. A further improvement for this architecture could be the better management of global parameters that appear redundant in certain cases. 
