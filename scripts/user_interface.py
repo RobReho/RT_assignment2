@@ -11,7 +11,9 @@ from std_srvs.srv import *
 #from final_assignment.srv import Usrcommand
 
 
-# service callback
+## service callback
+# allows the user to input a mode and a manual position 
+# in case of mode 2. also checks if the input is legitimate
 def man_pos_clbk(request):
 
     # Selection of the use mode

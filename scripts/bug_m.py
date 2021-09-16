@@ -17,22 +17,42 @@ from geometry_msgs.msg import Twist
 
 import math
 
+# publisher variable for robot's velocity
 pub = None
+
+# Client go to point service
 srv_client_go_to_point_ = None
+
+# Client wall follower service
 srv_client_wall_follower_ = None
-#srv_client_user_interface_ = None
+
+# Orientation
 yaw_ = 0
+
+# Orentationa angle allowed
 yaw_error_allowed_ = 5 * (math.pi / 180)  # 5 degrees
+
+# Robot base position
 position_ = Point()
+
+# Target position
 desired_position_ = Point()
 desired_position_.x = rospy.get_param('des_pos_x')
 desired_position_.y = rospy.get_param('des_pos_y')
 desired_position_.z = 0
-regions_ = None     # Laser directions
-state_desc_ = ['Go to point', 'wall following', 'target reached']
+
+# Laser directions
+regions_ = None     
+
+# int state variable
 state_ = 0
-active_ = False     # initialize algorithm as not active
-timeout = None      # Timer
+state_desc_ = ['Go to point', 'wall following', 'target reached']
+
+# initialize algorithm as not active
+active_ = False     
+
+# Timer
+timeout = None      
 
 # 0 - go to point
 # 1 - wall following
@@ -40,7 +60,7 @@ timeout = None      # Timer
 
 # callbacks
 
-## Callback service function to activate or deactivate the service
+## Callback function to activate or deactivate the service Bug0
 def bug0Callback(req):
 	global active_
 	active_ = req.data
@@ -49,7 +69,7 @@ def bug0Callback(req):
 	res.message = 'The algorithm has been switched!'
 	return res
 
-
+## Odometry informations about the robot
 def clbk_odom(msg):
     global position_, yaw_
 
@@ -66,7 +86,7 @@ def clbk_odom(msg):
     yaw_ = euler[2]
 
 
-
+## Laser datas will be divided in 5 subcatecories (directions)
 def clbk_laser(msg):
     global regions_
     regions_ = {
@@ -77,7 +97,8 @@ def clbk_laser(msg):
         'left':   min(min(msg.ranges[576:719]), 10),
     }
 
-
+## Changes the state of the robot, updates the "state" and "target reached" 
+# parameters and activate the appropriate services
 def change_state(state):
     global state_, state_desc_
     global srv_client_wall_follower_, srv_client_go_to_point_
@@ -105,10 +126,12 @@ def change_state(state):
         rospy.set_param("target_reached", True)    
         rospy.set_param("state", 2)     # target reached 
 
+# Sets robot in the right direction
 def normalize_angle(angle):
     if(math.fabs(angle) > math.pi):
         angle = angle - (2 * math.pi * angle) / (math.fabs(angle))
     return angle
+
 
 
 def main():

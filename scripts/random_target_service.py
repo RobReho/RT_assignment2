@@ -8,7 +8,9 @@ import rospy
 import random
 from std_srvs.srv import *
 
-# service callback
+## service callback
+# generates a random target among (-4,-3)(-4,2)(-4,7)(5,-7)(5,-3)(5,-1);
+# to be set as des_pos_x and des_pos_y parameters
 def rand_targ(req):
     print("Choosing a random position among (-4,-3)(-4,2)(-4,7)(5,-7)(5,-3)(5,-1);")
     x = random.choice([-4, 5])          # Random x coordinate between available targets

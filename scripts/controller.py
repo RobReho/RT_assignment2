@@ -14,33 +14,41 @@ from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseActionResult
 from geometry_msgs.msg import Twist
 from actionlib_msgs.msg import GoalID
 
-srv_client_random_target_ = None
-srv_client_user_interface_ = None
-srv_client_go_to_point_ = None
-srv_client_wall_follower_ = None
-srv_bug0_client = None
+# Goal for move_base algorithm
 mb_goal = None
 
-## Bug algorithm boolean
+# Bug algorithm boolean
 bug_active = False
 
 ## Goal publishers
-msg_target_pub = rospy.Publisher("move_base/goal", MoveBaseActionGoal, queue_size=1)    # Publish next goal
-cancel_trg_pub = rospy.Publisher("/move_base/cancel", GoalID, queue_size = 1)           # Cancel goal 
+# Publish next goal
+msg_target_pub = rospy.Publisher("move_base/goal", MoveBaseActionGoal, queue_size=1)    
+# Cancel goal 
+cancel_trg_pub = rospy.Publisher("/move_base/cancel", GoalID, queue_size = 1)           
 
 ## Null velocity publisher (stop option)
 cmdvel_pub = rospy.Publisher("/cmd_vel", Twist, queue_size = 1)
 
 
-# Services
-srv_client_random_target_ = rospy.ServiceProxy('/random_target', Empty)             # Service called to generate a random target
-srv_client_user_interface_ = rospy.ServiceProxy('/user_interface', Empty)           # User interface: gets the desired mode and manual goal if needed
-srv_client_wall_follower_ = rospy.ServiceProxy('/wall_follower_switch', SetBool)    # Wall follower service
-srv_bug0_client = rospy.ServiceProxy('/bug0_service',SetBool)			        	# Bug0 algorithm
-srv_client_go_to_point_ = rospy.ServiceProxy('/go_to_point_switch', SetBool)        # Go to point service
+## Services
+# Service called to generate a random target
+srv_client_random_target_ = rospy.ServiceProxy('/random_target', Empty)  
+
+# User interface: gets the desired mode and manual goal if needed
+srv_client_user_interface_ = rospy.ServiceProxy('/user_interface', Empty)        
+
+# Wall follower service
+srv_client_wall_follower_ = rospy.ServiceProxy('/wall_follower_switch', SetBool)    
+
+# Bug0 algorithm
+srv_bug0_client = rospy.ServiceProxy('/bug0_service',SetBool)			        	
+
+# Go to point service
+srv_client_go_to_point_ = rospy.ServiceProxy('/go_to_point_switch', SetBool)        
+
+
 
 ## Function called when move_base is the active algorithm.
-#
 # Gets the target position set in the parameters by the concerning services and 
 # publishes it as goal position with a message of type move_base_msgs/MoveBaseActionGoal 
 # on the topic move_base /goal.
